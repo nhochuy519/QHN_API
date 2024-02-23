@@ -21,15 +21,6 @@ app.use('/product',productRouter)
 
 
 
-const run = async()=>{
-    const products = await Products.create(data);
-
-}
-
-const deletePd = async()=>{
-    const products = await Products.deleteMany();
-    
-}
 
 app.use((req,res,next)=>{{
     res.status(400).send('không tìm thấy')
@@ -37,6 +28,6 @@ app.use((req,res,next)=>{{
 
 
 app.listen(process.env.PORT,()=>{
-    
+    console.log('đang lắng nghe trên cổng 8000')
 })
 

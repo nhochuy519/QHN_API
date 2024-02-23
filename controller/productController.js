@@ -30,15 +30,15 @@ class ApiFeatures {
         return this
         
     }
-    filterPart() {
+    // filterPart() {
         
-        if (this.queryString.q) {
-            this.query = this.query.find({ name: { $regex: this.queryString.q, $options: 'i' } });
-            // options khong phan biet hoa thuong
-            console.log(this.query)
-        }
-        return this;
-    }
+    //     if (this.queryString.q) {
+    //         this.query = this.query.find({ name: { $regex: this.queryString.q, $options: 'i' } });
+    //         // options khong phan biet hoa thuong
+    //         console.log(this.query)
+    //     }
+    //     return this;
+    // }
 }
 
 

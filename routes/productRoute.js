@@ -11,7 +11,7 @@ router.route('/girl')
 router.route('/men')
         .get(aliasBoys,getController)
 router.route('/children')
-        .get( aliasChildren ,getController      )
+        .get( aliasChildren ,getController )
 
 router.route('/')
         .get(getController)
