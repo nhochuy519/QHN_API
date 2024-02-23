@@ -23,7 +23,7 @@ app.use('/product',productRouter)
 
 const run = async()=>{
     const products = await Products.create(data);
-    console.log(products)
+
 }
 
 const deletePd = async()=>{
@@ -37,6 +37,6 @@ app.use((req,res,next)=>{{
 
 
 app.listen(process.env.PORT,()=>{
-    console.log('đang lắng nghe trên cổng 8000')
+    
 })
 
