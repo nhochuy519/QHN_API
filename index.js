@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const Products = require('./modules/productModule');
-const fs = require('fs')
+
 
 
 const productRouter = require('./routes/productRoute') 
 
 require('dotenv').config()
 
-const data = JSON.parse(fs.readFileSync('./product.json','utf-8'))
+
 
 mongoose.connect(process.env.DATABASE)
     .then(()=>{
