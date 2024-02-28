@@ -6,6 +6,8 @@ const Products = require('./modules/productModule');
 
 
 const productRouter = require('./routes/productRoute') 
+app.use(express.json())
+
 
 require('dotenv').config()
 

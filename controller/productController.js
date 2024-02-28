@@ -66,11 +66,31 @@ const getController = async(req,res) =>{
 
     
 }
+const postProduct =async(req,res)=>{
+    try {
+        const product =await Products.create(req.body);
+        res.status(200).json({
+            status:'success',
+            data:{
+                product,
+            }
 
+        })
+    } catch (error) {
+        res.status(401).json({
+            status:'fail',
+            message:error
+
+        })
+    }
+    
+
+}
 
 module.exports={
     getController,
     aliasGirls,
     aliasBoys,
-    aliasChildren 
+    aliasChildren ,
+    postProduct
 }

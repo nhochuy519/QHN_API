@@ -1,7 +1,7 @@
 const express = require('express');
 
 
-const {getController,aliasGirls,aliasBoys, aliasChildren } = require('../controller/productController')
+const {getController,aliasGirls,aliasBoys, aliasChildren ,postProduct} = require('../controller/productController')
 
 const router = express.Router();
 
@@ -15,6 +15,7 @@ router.route('/children')
 
 router.route('/')
         .get(getController)
+        .post(postProduct)
 
 
 
