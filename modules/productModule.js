@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const  productSize = new mongoose.Schema({
     nameSize:{
         type:String,
-        require:[true,"Quần áo phải có size"]
+        required:[true,"Clothes must be size"]
     },
     quantitySize:{
         type:Number,
@@ -19,7 +19,7 @@ const  productSize = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
     name: {
         type:String,
-        require:[true,"sản phẩm phải có tên"],
+        required:[true,"Product must have a name"],
         trim:true,
         unique:false
         
@@ -27,11 +27,11 @@ const productSchema = new mongoose.Schema({
     },
     classify: {
         type:String,
-        require:[true,"sản phẩm phải có phần loại"]
+        required:[true,"Products must have classification"]
     },
     price: {
         type:Number,
-        require:[true,"sản phẩm phải có giá"],
+        required:[true,"Products must have a price"],
         trim:true
     },
     ratings:{
@@ -49,7 +49,7 @@ const productSchema = new mongoose.Schema({
     images:[String],
     imageCover:{
         type:String,
-        require:[true,'Phải có ảnh sản phẩm']
+        required:[true,'Product must have a name']
     }
     
 

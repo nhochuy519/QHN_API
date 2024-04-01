@@ -2,12 +2,16 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const Products = require('./modules/productModule');
+
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controller/errController')
 const cors = require('cors')
 
 
 
 app.use(cors())
-const productRouter = require('./routes/productRoute') 
+const productRouter = require('./routes/productRoutes') ;
+const userRouter = require('./routes/userRoutes')
 app.use(express.json())
 
 
@@ -22,13 +26,19 @@ mongoose.connect(process.env.DATABASE)
 
 
 app.use('/product',productRouter)
+app.use('/user',userRouter)
 
 
 
 
-app.use((req,res,next)=>{{
-    res.status(400).send('không tìm thấy')
-}})
+app.all('*',(req,res,next)=>{
+    next(new AppError(`Can't find ${req.originalUrl} on this server`,404))
+})
+
+
+
+app.use(globalErrorHandler)
+
 
 
 app.listen(process.env.PORT,()=>{
