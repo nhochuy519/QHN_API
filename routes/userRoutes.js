@@ -20,14 +20,14 @@ router.post('/signup',signup)
 router.post('/login',login)
 
 router.route('/privacy')
-      .patch(protect,editUser)
-      .delete(protect,deleteUser)
+      .patch(protect,editUser)// chinh sua mat khau
+      .delete(protect,deleteUser) // xoa tai khoan
 
 
 router.route('/purchase')
-      .get(protect,viewInvoice)
-      .post(protect,submitOrder)
-      .delete(protect,deleteOrder)
+      .get(protect,viewInvoice)// xem thong tin don hang
+      .post(protect,submitOrder) // mua hang
+      .delete(protect,deleteOrder) // mua hang
 
 //admin
 router.post('/signUpAdmin',protect,restrictTo('admin'),signupAdmin)

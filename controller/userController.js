@@ -82,9 +82,9 @@ const protect = catchAsync(async(req,res,next) =>{
 }
 )
 
-const restrictTo = (role)=>{
+const restrictTo = (roleAmin)=>{
         return (req,res,next) =>{
-            if(!req.user.role === role) {
+            if(req.user.role !== roleAmin) {
                 console.log('thuc hien loi restrictTo')
                 return next(new AppError('You do not have permission to perform this action',403))
             }
@@ -105,6 +105,8 @@ const editUser = catchAsync(async(req,res,next)=>{
         password=await bcrypt.hash(password,12)
         const newUserPass =await User.findByIdAndUpdate(req.user.id,{
             password,
+            passwordChangeAt:Date.now()
+            
         },{
             new:true,
             runValidators:true // do thiết lập true nên trình xác nhận được chạy

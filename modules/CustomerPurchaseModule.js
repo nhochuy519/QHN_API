@@ -34,13 +34,14 @@ const CustomerPurchaseSchema = mongoose.Schema({
     
     createdAt:{
         type:Date,
-        default:Date.now(),
+
         
     },
 })
 
 CustomerPurchaseSchema.pre('save', function(next){
     this.Total = this.RetailPrice * this.Quantity;
+    this.createdAt=Date.now()
     next()
 })
 

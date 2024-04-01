@@ -74,7 +74,7 @@ const deleteOrder = catchAsync(async(req,res,next) =>{
        
         
     ])
-    const listIdOr = arrange[0].listId
+    const listIdOr = arrange[req.body.orderCount].listId
     console.log("list còn lại",listIdOr)
     const deleteOr =await CustomerPurchase.deleteMany({_id:{$in:listIdOr}})
     res.status(200).json({
