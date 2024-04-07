@@ -42,7 +42,6 @@ const login = catchAsync(async(req,res,next)=>{
     res.status(200).json({
         status:'success',
         token,
-        user,
 
     })
 
@@ -110,7 +109,7 @@ const editUserPass = catchAsync(async(req,res,next)=>{
         })
         res.status(200).json({
             status:'success',
-            data:user
+            message:'Changed password successfully'
         })
 })
 
@@ -119,7 +118,7 @@ const editUserPass = catchAsync(async(req,res,next)=>{
 const deleteUser = catchAsync(async(req,res,next)=>{
     const product =await User.findByIdAndDelete(req.user.id);
     res.status(200).json({
-        message:'Xoá thành công',
+        message:'Delete successfully',
 
     })
 })
