@@ -46,6 +46,7 @@ const login = catchAsync(async(req,res,next)=>{
     })
 
 
+
 })
 
 const protect = catchAsync(async(req,res,next) =>{
@@ -149,6 +150,9 @@ const profileUpdate = catchAsync(async(req,res,next)=>{
 
 })
 
+
+
+
 module.exports={
     signup,
     login,
@@ -157,5 +161,6 @@ module.exports={
     deleteUser,
     editUserPass,
     sendProfile,
-    profileUpdate
+    profileUpdate,
+
 }

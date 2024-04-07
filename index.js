@@ -12,6 +12,7 @@ const cors = require('cors')
 app.use(cors())
 const productRouter = require('./routes/productRoutes') ;
 const userRouter = require('./routes/userRoutes')
+const adminRouter = require('./routes/adminRoutes')
 app.use(express.json())
 
 
@@ -27,6 +28,7 @@ mongoose.connect(process.env.DATABASE)
 
 app.use('/product',productRouter)
 app.use('/user',userRouter)
+app.use('/admin',adminRouter)
 
 
 

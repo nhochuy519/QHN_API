@@ -19,6 +19,9 @@ const router = express.Router();
 router.post('/signup',signup)
 router.post('/login',login)
 
+
+
+
 router.get('/profile',protect,sendProfile)
 
 router.route('/privacy')
@@ -33,8 +36,7 @@ router.route('/purchase')
 
 
 router.patch('/editProfile',protect,profileUpdate)     
-//admin
-router.post('/signUpAdmin',protect,restrictTo('admin'),signupAdmin)
+
 
 
 
