@@ -20,9 +20,6 @@ const signup =catchAsync(async (req,res,next)=>{
     res.status(200).json({
         status:'success',
         token,
-        data:{
-            newUser,
-        }
     })
 
 }) 
@@ -93,11 +90,11 @@ const restrictTo = (roleAmin)=>{
     }
 
 
-const editUser = catchAsync(async(req,res,next)=>{
+const editUserPass = catchAsync(async(req,res,next)=>{
         let {oldPassWord,password}=req.body;
         console.log("edit",req.user)
         // kiểm tra mật khẩu cũ 
-        const user = await User.findById(req.user.id).select('+password')
+        const user = await User.findById(req.user._id).select('+password')
         const checkPassWord = await user.correctPassword(oldPassWord,user.password)
         if(!checkPassWord) {
             return next(new AppError('Incorrect password',401))
@@ -118,6 +115,7 @@ const editUser = catchAsync(async(req,res,next)=>{
 })
 
 
+
 const deleteUser = catchAsync(async(req,res,next)=>{
     const product =await User.findByIdAndDelete(req.user.id);
     res.status(200).json({
@@ -126,6 +124,31 @@ const deleteUser = catchAsync(async(req,res,next)=>{
     })
 })
 
+const sendProfile = catchAsync(async(req,res,next)=>{
+    const userProfile = await User.find({"userName":req.user.userName});
+
+    res.status(200).json({
+        status:"success",
+        data:userProfile
+    })
+
+})
+
+
+const profileUpdate = catchAsync(async(req,res,next)=>{
+    const userUpdate =await User.findByIdAndUpdate(req.user.id,req.body,{
+        new:true,
+        runValidators:true // do thiết lập true nên trình xác nhận được chạy
+    })
+
+    res.status(200).json({
+        status:'success',
+        user:req.user,
+        data:userUpdate,
+        
+    })
+
+})
 
 module.exports={
     signup,
@@ -133,5 +156,7 @@ module.exports={
     protect,
     restrictTo,
     deleteUser,
-    editUser
+    editUserPass,
+    sendProfile,
+    profileUpdate
 }

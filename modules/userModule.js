@@ -46,6 +46,17 @@ const userSchema = mongoose.Schema(
                 message:'Passwords are not duplicates'
             }
         },
+        gender:{
+            type:String,
+            enum:['male','female']
+        },
+        Address:{
+            type:String,
+            default:''
+        },
+        Phone:{
+            type:String,
+        },
         products :[String],
         passwordChangeAt :Date
     }
