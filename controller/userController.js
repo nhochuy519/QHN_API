@@ -5,8 +5,11 @@ const catchAsync= require('../utils/catchAsync')
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcrypt');
+const crypto = require('crypto')
 
 const signToken = (id) => jwt.sign({id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN})
+
+const sendEmailWithGoogle= require('../utils/email')
 
 const signup =catchAsync(async (req,res,next)=>{
     const newUser = await User.create({
@@ -21,7 +24,7 @@ const signup =catchAsync(async (req,res,next)=>{
         status:'success',
         token,
     })
-
+ 
 }) 
 
 const login = catchAsync(async(req,res,next)=>{
@@ -151,7 +154,60 @@ const profileUpdate = catchAsync(async(req,res,next)=>{
 })
 
 
+const forgotPassword = catchAsync(async(req,res,next)=>{
+    const user = await User.findOne({email:req.body.email})
+    console.log(user)
+    if(!user) {
+        return next(new AppError('There is no user with email address',404))
+    }
 
+    const createCode = user.createPasswordResetCode();
+    console.log(createCode)
+    await user.save();
+
+    const message =createCode;
+
+    try {
+        await sendEmailWithGoogle({
+            email:user.email,
+            subject:'Your password reset token(valid for 10 min)',
+            message,    
+        })
+        res.status(200).json({
+            status:'success',
+            message:'TOken sent to email',
+        })
+    } catch (error) {
+        user.passwordResetCode = undefined;
+        user.passwordResetExpires=undefined;
+        await user.save();
+
+        return next(new AppError('There was an error sending the email. Try again later'),500)
+    }
+   
+})
+
+const resetPassword = catchAsync(async(req,res,next)=>{
+    const hashedCode = crypto.createHash('sha256').update(req.body.token).digest('hex');
+
+    const user = await User.findOne({passwordResetCode:hashedCode,passwordResetExpires:{$gte:Date.now()}})
+    if(!user) {
+        return next(new AppError('Code is invalid or has expired',400))
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetCode = undefined;
+    user.passwordResetExpires = undefined;
+
+    await user.save();
+    const token = signToken(user._id);
+    res.status(200).json({
+        status:'success',
+        token,
+    })
+
+})
 
 module.exports={
     signup,
@@ -162,5 +218,7 @@ module.exports={
     editUserPass,
     sendProfile,
     profileUpdate,
+    forgotPassword,
+    resetPassword
 
 }

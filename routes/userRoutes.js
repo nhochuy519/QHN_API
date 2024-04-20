@@ -1,6 +1,6 @@
 const express=require('express');
 
-const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate}= require('../controller/userController')
+const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword}= require('../controller/userController')
 
 const signupAdmin = require('../controller/adminController');
 const { submitOrder,viewInvoice,deleteOrder } = require('../controller/PurchaseController');
@@ -29,10 +29,16 @@ router.route('/privacy')
       .delete(protect,deleteUser) // xoa tai khoan
 
 
+// quên mật khẩu
+
+router.post('/forgotPassword',forgotPassword)
+router.patch('/resetPassword',resetPassword)
+
+
 router.route('/purchase')
       .get(protect,viewInvoice)// xem thong tin don hang
       .post(protect,submitOrder) // mua hang
-      .delete(protect,deleteOrder) // mua hang
+      .delete(protect,deleteOrder) // xoá hàng
 
 
 router.patch('/editProfile',protect,profileUpdate)     

@@ -1,10 +1,11 @@
-
+const crypto = require('crypto');
 
 const mongoose = require('mongoose');
 
 const validator = require('validator');
 
 const bcrypt = require('bcrypt');
+
 
 
 
@@ -58,6 +59,11 @@ const userSchema = mongoose.Schema(
             type:String,
         },
         products :[String],
+
+        passwordResetCode:String,
+        passwordResetExpires:Date,// đặt lại mật khẩu hết hạn
+
+
         passwordChangeAt :Date
     }
     
@@ -65,8 +71,18 @@ const userSchema = mongoose.Schema(
 )
 
 userSchema.pre('save',async function(next){
+    if(!this.isModified('password')) {
+        return next()
+    }
     this.password=await bcrypt.hash(this.password,12)
     this.passwordConfirm=undefined
+    next()
+})
+userSchema.pre('save',async function(next){
+    if(!this.isModified('password') || this.isNew) {
+        return next()
+    }
+    this.passwordChangeAt =Date.now()
     next()
 })
 
@@ -84,6 +100,18 @@ userSchema.methods.changedPasswordAfter=  function(JWTtimeToken) {
         return JWTtimeToken < PasswordChangeTime 
    }
    return false
+}
+
+userSchema.methods.createPasswordResetCode = function() {
+    const resetCode = crypto.randomBytes(5).toString('hex');
+
+    this.passwordResetCode= crypto.createHash('sha256').update(resetCode).digest('hex');
+
+
+
+    this.passwordResetExpires = Date.now()+10 * 60 * 1000; // hết hạn sao 10 phút
+
+    return resetCode
 }
 
 const User = mongoose.model('User',userSchema);
