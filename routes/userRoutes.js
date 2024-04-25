@@ -3,15 +3,14 @@ const express=require('express');
 const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword}= require('../controller/userController')
 
 const signupAdmin = require('../controller/adminController');
-const { submitOrder,viewInvoice,deleteOrder } = require('../controller/PurchaseController');
+const { createOrder,orderPlaced ,deleteOrder} = require('../controller/PurchaseController');
 const router = express.Router();
 
 
 
        /*
                 UpdateUser
-                DeleteUser 
-                new table danh sách người đặt hàng
+,                new table danh sách người đặt hàng
         
         */
 
@@ -35,11 +34,18 @@ router.post('/forgotPassword',forgotPassword)
 router.patch('/resetPassword',resetPassword)
 
 
-router.route('/purchase')
-      .get(protect,viewInvoice)// xem thong tin don hang
-      .post(protect,submitOrder) // mua hang
-      .delete(protect,deleteOrder) // xoá hàng
+router.post('/createOrder',protect,createOrder)
 
+router.route('/orderPlaced')
+      .get(protect,orderPlaced)
+      .delete(protect,deleteOrder)
+      // .get(protect,viewInvoice)// xem thong tin don hang
+      // .post(protect,submitOrder) // mua hang
+      // .delete(protect,deleteOrder) // xoá hàng
+
+
+// router.route('/orderPlaced')
+//       .get(protect,orderPlaced )
 
 router.patch('/editProfile',protect,profileUpdate)     
 

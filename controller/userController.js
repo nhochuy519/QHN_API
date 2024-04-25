@@ -78,6 +78,7 @@ const protect = catchAsync(async(req,res,next) =>{
     }
     
     req.user=user
+    console.log(req.user)
     next()
 }
 )
@@ -85,7 +86,6 @@ const protect = catchAsync(async(req,res,next) =>{
 const restrictTo = (roleAmin)=>{
         return (req,res,next) =>{
             if(req.user.role !== roleAmin) {
-                console.log('thuc hien loi restrictTo')
                 return next(new AppError('You do not have permission to perform this action',403))
             }
             next()

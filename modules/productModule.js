@@ -2,7 +2,16 @@
 const mongoose = require('mongoose')
 
 
-
+const commentSchema = mongoose.Schema({
+    userName:String,
+    comment:String,
+    commentCreateAt:Date,
+    star:{
+        type:Number,
+        default:5,
+        enum:[1,2,3,4,5]
+    }
+})
 const  productSize = new mongoose.Schema({
     nameSize:{
         type:String,
@@ -50,7 +59,8 @@ const productSchema = new mongoose.Schema({
     imageCover:{
         type:String,
         required:[true,'Product must have a name']
-    }
+    },
+    commment:[commentSchema]
     
 
 })

@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 
 
 
+
 const userSchema = mongoose.Schema(
     {
         userName :{
@@ -25,7 +26,7 @@ const userSchema = mongoose.Schema(
         },
         photo :String,
         role:{
-            type:'String',
+            type:String,
             enum:['user','admin'],
             default:'user'
         },
@@ -59,7 +60,7 @@ const userSchema = mongoose.Schema(
             type:String,
         },
         products :[String],
-
+        
         passwordResetCode:String,
         passwordResetExpires:Date,// đặt lại mật khẩu hết hạn
 
