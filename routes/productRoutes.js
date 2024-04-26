@@ -26,7 +26,7 @@ router.route('/') //http://localhost:8000/product
         .get(getProduct)
         .post(protect,restrictTo('admin'),postProduct)// them san pham danh cho admin
 
-router.post('/comment/:id',createComment)
+router.post('/comment',protect,createComment)
 
 
 

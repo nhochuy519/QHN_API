@@ -131,9 +131,10 @@ const DeleteProduct =catchAsync(async(req,res,next)=>{
 
 const createComment = catchAsync(async(req,res,next)=>{
     
-    await Products.findByIdAndUpdate(req.params.id,{
-        comment:req.body
-    })
+    const user =await Products.findById(req.user._id);
+
+    user.comment.push(req.body)
+    await user.save()
     res.status(200).json({
         status:'success'
     })
