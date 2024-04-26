@@ -6,6 +6,7 @@ const commentSchema = new mongoose.Schema({
     userName:String,
     comment:String,
     commentCreateAt:Date,
+    img:String,
     star:{
         type:Number,
         default:5,
