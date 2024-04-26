@@ -131,7 +131,7 @@ const DeleteProduct =catchAsync(async(req,res,next)=>{
 
 const createComment = catchAsync(async(req,res,next)=>{
     
-    const user =await Products.findById(req.user._id);
+    const user =await Products.findById(req.params.id);
 
     user.comment.push(req.body)
     await user.save()
