@@ -60,7 +60,7 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:[true,'Product must have a name']
     },
-    commment:[commentSchema]
+    comment:[commentSchema]
     
 
 })

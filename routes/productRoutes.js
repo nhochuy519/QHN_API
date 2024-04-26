@@ -7,7 +7,8 @@ const {  getProduct,
          aliasChildren ,
          postProduct,
          UpdateProduct,
-         DeleteProduct
+         DeleteProduct,
+         createComment
         } = require('../controller/productController')
 
 const router = express.Router();
@@ -24,6 +25,10 @@ router.route('/children')
 router.route('/') //http://localhost:8000/product
         .get(getProduct)
         .post(protect,restrictTo('admin'),postProduct)// them san pham danh cho admin
+
+router.post('/comment/:id',createComment)
+
+
 
 router.route("/:id") //http://localhost:8000/product/65d89ded2ffc0ebc68556221
         .patch(protect,restrictTo('admin') ,UpdateProduct)// chinh sua san pham danh cho admin
