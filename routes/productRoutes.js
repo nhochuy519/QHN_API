@@ -8,7 +8,9 @@ const {  getProduct,
          postProduct,
          UpdateProduct,
          DeleteProduct,
-         createComment
+         createComment,
+         upDateCmt,
+         deleteCmt
         } = require('../controller/productController')
 
 const router = express.Router();
@@ -26,7 +28,9 @@ router.route('/') //http://localhost:8000/product
         .get(getProduct)
         .post(protect,restrictTo('admin'),postProduct)// them san pham danh cho admin
 
-router.patch('/comment/:id',protect,createComment)
+router.patch('/comment/:id',protect,createComment);
+router.patch('/comment/:id/:commentIndex',protect, upDateCmt)
+router.delete('/comment/:id/:commentIndex',protect, deleteCmt);
 
 
 

@@ -140,6 +140,33 @@ const createComment = catchAsync(async(req,res,next)=>{
     })
 })
 
+const upDateCmt = catchAsync(async(req,res,next)=>{
+    
+    const product =await Products.findById(req.params.id);
+
+    product.comment[req.params.commentIndex]={
+        ...product.comment[req.params.commentIndex],
+        comment : req.body.comment,
+        commentCreateAt:req.body.commentCreateAt
+    }
+    await product.save()
+    res.status(200).json({
+        status:'success'
+    })
+})
+
+const deleteCmt = catchAsync(async(req,res,next)=>{
+    
+    const product =await Products.findById(req.params.id);
+
+    product.comment.splice(req.params.commentIndex, 1)
+    await product.save()
+    res.status(200).json({
+        status:'success'
+    })
+})
+
+
 module.exports={
     getProduct,
     aliasGirls,
@@ -148,5 +175,7 @@ module.exports={
     postProduct,
     UpdateProduct,
     DeleteProduct,
-    createComment
+    createComment,
+    deleteCmt,
+    upDateCmt
 }
