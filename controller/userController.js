@@ -55,18 +55,15 @@ const login = catchAsync(async(req,res,next)=>{
 const protect = catchAsync(async(req,res,next) =>{
     let token;
     
-    console.log(req.headers.Authorization)
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
     }
-
-    console.log(token)
     if(!token) {
         return next(new AppError('Your are not logged in! Please log in to get access'),401)
     }
 
     const decoded =await jwt.verify(token,process.env.JWT_SECRET);
-    console.log(decoded)
+
     const user =await User.findById(decoded.id);
     
     if(!user) {
@@ -78,7 +75,7 @@ const protect = catchAsync(async(req,res,next) =>{
     }
     
     req.user=user
-    console.log(req.user)
+    console.log(req.user.userName)
     next()
 }
 )
@@ -95,7 +92,7 @@ const restrictTo = (roleAmin)=>{
 
 const editUserPass = catchAsync(async(req,res,next)=>{
         let {oldPassWord,password}=req.body;
-        console.log("edit",req.user)
+
         // kiểm tra mật khẩu cũ 
         const user = await User.findById(req.user._id).select('+password')
         const checkPassWord = await user.correctPassword(oldPassWord,user.password)
@@ -156,13 +153,11 @@ const profileUpdate = catchAsync(async(req,res,next)=>{
 
 const forgotPassword = catchAsync(async(req,res,next)=>{
     const user = await User.findOne({email:req.body.email})
-    console.log(user)
     if(!user) {
         return next(new AppError('There is no user with email address',404))
     }
 
     const createCode = user.createPasswordResetCode();
-    console.log(createCode)
     await user.save();
 
     const message =createCode;

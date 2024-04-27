@@ -29,8 +29,9 @@ router.route('/') //http://localhost:8000/product
         .post(protect,restrictTo('admin'),postProduct)// them san pham danh cho admin
 
 router.patch('/comment/:id',protect,createComment);
-router.patch('/comment/:id/:commentIndex',protect, upDateCmt)
-router.delete('/comment/:id/:commentIndex',protect, deleteCmt);
+router.patch('/comment/update/:id',protect, upDateCmt);
+router.delete('/comment/deleteCmt/:id',protect, deleteCmt)
+
 
 
 

@@ -61,13 +61,16 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:[true,'Product must have a name']
     },
-    comment:[commentSchema]
+    comments:[commentSchema]
     
 
 })
 
 
 const Products = mongoose.model('Products',productSchema)
-
+productSchema.pre('save', async function(next) {
+    this.comments.sort((a, b) => a.commentCreateAt - b.commentCreateAt);
+    next();
+});
 
 module.exports=Products

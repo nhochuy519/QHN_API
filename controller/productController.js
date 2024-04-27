@@ -1,8 +1,8 @@
 const Products = require('../modules/productModule');
-const  mongoose = require('mongoose');
+
 const AppError = require('../utils/appError')
 
-
+const mongoose = require('mongoose')
 
 const catchAsync = require('../utils/catchAsync')
 
@@ -132,8 +132,12 @@ const DeleteProduct =catchAsync(async(req,res,next)=>{
 const createComment = catchAsync(async(req,res,next)=>{
     
     const product =await Products.findById(req.params.id);
-
-    product.comment.push(req.body)
+    
+    product.comments.push({
+        commentCreateAt:Date.now(),
+        ...req.body
+    }
+    )
     await product.save()
     res.status(200).json({
         status:'success'
@@ -141,30 +145,54 @@ const createComment = catchAsync(async(req,res,next)=>{
 })
 
 const upDateCmt = catchAsync(async(req,res,next)=>{
-    
-    const product =await Products.findById(req.params.id);
+    const userName = req.body.userName;
+    const newCmt = req.body.comment;
+    const cmtId = req.body.commentId;
 
-    product.comment[req.params.commentIndex]={
-        ...product.comment[req.params.commentIndex],
-        comment : req.body.comment,
-        commentCreateAt:req.body.commentCreateAt
+    const product = await Products.findById(req.params.id);
+    const comment = product.comments.id(cmtId);
+
+    
+    if(comment && req.user.userName === userName) {
+        console.log('thực hiện')
+        comment.comment =newCmt;
+        comment.commentCreateAt=Date.now();
+        await product.save()
+        res.status(200).json({
+            status:'success',
+            message:'Comment Update successfully'
+            
+        })
     }
-    await product.save()
-    res.status(200).json({
-        status:'success'
-    })
+    else  {
+        return next(new AppError('Not found comment',404))
+    }
+    
+    
 })
 
 const deleteCmt = catchAsync(async(req,res,next)=>{
     
-    const product =await Products.findById(req.params.id);
+    const userName = req.body.userName;
+const cmtId = req.body.commentId;
 
-    product.comment.splice(req.params.commentIndex, 1)
-    await product.save()
+
+
+if ( req.user.userName === userName) {
+    const product = await Products.findByIdAndUpdate(req.params.id,
+        { $pull: { 'comments': { _id: cmtId } } });
+    
     res.status(200).json({
-        status:'success'
-    })
+        status: 'success',
+        message: 'Comment deleted successfully',
+    });
+    
+    
+} else {
+    return next(new AppError('Not found comment', 404));
+}
 })
+
 
 
 module.exports={
