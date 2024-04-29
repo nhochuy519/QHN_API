@@ -38,10 +38,18 @@ const orderPlaced = catchAsync(async(req,res,next)=>{
 })
 
 const deleteOrder = catchAsync(async(req,res,next)=>{
-    const order = await CustomerPurchase.find({name:req.user.name});
+    const order = await CustomerPurchase.findById(req.body.IdOrder);
 
-    if(order[req.body.index].status === 'Đang xử lý') {
-        await CustomerPurchase.findByIdAndDelete(order[req.body.index]._id);
+    // if(order[req.body.index].status === 'Đang xử lý') {
+    //     await CustomerPurchase.findByIdAndDelete(order[req.body.index]._id);
+    //     res.status(200).json({
+    //         status:'success',
+    //         message:'Order deleted successfully'
+    //     })
+    // }
+
+    if(order.status === "Đang xử lý") {
+        await CustomerPurchase.findByIdAndDelete(req.body.IdOrder);
         res.status(200).json({
             status:'success',
             message:'Order deleted successfully'

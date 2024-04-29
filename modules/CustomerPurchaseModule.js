@@ -27,8 +27,8 @@ const CustomerPurchaseSchema = new mongoose.Schema({
     products:[productSchema],
     paymentMethod:{
         type:String,
-        emun:['Thanh toán khi nhận hàng','Chuyển khoản'],
-        default:'Thanh toán khi nhận hàng'
+        emun:['COD','Chuyển khoản'],
+        default:'COD'
     },
     Total:Number,
     

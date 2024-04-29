@@ -65,7 +65,12 @@ const userSchema = mongoose.Schema(
         passwordResetExpires:Date,// đặt lại mật khẩu hết hạn
 
 
-        passwordChangeAt :Date
+        passwordChangeAt :Date,
+        paymentMethod:{
+            type:String,
+            emun:['COD','Chuyển khoản'],
+            default:'COD'
+        },
     }
     
     
