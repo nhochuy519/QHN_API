@@ -34,6 +34,9 @@ class ApiFeatures {
             queryObj ={ name: { $regex: this.queryString.q, $options: 'i' } }
         }
         this.query= this.query.find(queryObj)
+        if(this.queryString.limit) {
+            this.query=this.query.limit(this.queryString.limit);
+        }
         return this
         
     }
