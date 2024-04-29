@@ -28,19 +28,21 @@ class ApiFeatures {
     }
 
     filter() {
+
         let queryObj = { ...this.queryString };
         console.log(this.queryString)
         if(this.queryString.q) {
             queryObj ={ name: { $regex: this.queryString.q, $options: 'i' } }
         }
         this.query= this.query.find(queryObj)
-       
+        
         return this
         
     }
     limitField(){
         if (this.queryString.limit) {
-            this.query = this.query.limit(parseInt(this.queryString.limit));
+            const limit = this.queryString.limit * 1 ;
+            this.query = this.query.limit(limit);
         }
         return this;
     }
@@ -63,6 +65,7 @@ const getProduct =catchAsync( async(req,res,next) =>{
         const apiProducts = new ApiFeatures(Products.find(),req.query)
         
         apiProducts.filter()
+            .limitField()
         
         const products = await apiProducts.query
         console.log(products)
