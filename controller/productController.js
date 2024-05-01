@@ -26,9 +26,9 @@ class ApiFeatures {
         this.query = query;
         this.queryString =queryString;
     }
-
+   
     filter() {
-
+        console.log(this.queryString)
         let queryObj = { ...this.queryString };
         console.log(this.queryString)
         if(this.queryString.q) {
@@ -43,6 +43,13 @@ class ApiFeatures {
         if (this.queryString.limit) {
             const limit = this.queryString.limit * 1 ;
             this.query = this.query.limit(limit);
+        }
+        return this;
+    }
+    filterByPrice() {
+        if(this.queryString.filterByPrice) {
+            const filterPrice = JSON.parse(this.queryString.filterByPrice);
+            console.log(filterPrice )
         }
         return this;
     }
@@ -66,6 +73,7 @@ const getProduct =catchAsync( async(req,res,next) =>{
         
         apiProducts.filter()
             .limitField()
+            .filterByPrice()
         
         const products = await apiProducts.query
         console.log(products)
