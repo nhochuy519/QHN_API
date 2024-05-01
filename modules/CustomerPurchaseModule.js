@@ -7,7 +7,8 @@ const productSchema = new mongoose.Schema({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Products' }, // Tham chiếu đến schema sản phẩm
     name: String,
     quantity: Number,
-    price: Number
+    price: Number,
+    size:Number
   });
 
 
