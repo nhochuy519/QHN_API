@@ -1,6 +1,6 @@
 const express=require('express');
 
-const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword}= require('../controller/userController')
+const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword,addCart}= require('../controller/userController')
 
 const signupAdmin = require('../controller/adminController');
 const { createOrder,orderPlaced ,deleteOrder} = require('../controller/PurchaseController');
@@ -23,9 +23,9 @@ router.post('/login',login)
 
 router.get('/profile',protect,sendProfile)
 
-router.route('/privacy')
-      .patch(protect,editUserPass)// chinh sua mat khau
-      .delete(protect,deleteUser) // xoa tai khoan
+// router.route('/privacy')
+//       .patch(protect,editUserPass)// chinh sua mat khau
+//       .delete(protect,deleteUser) // xoa tai khoan
 
 
 // quên mật khẩu
@@ -47,9 +47,10 @@ router.route('/orderPlaced')
 // router.route('/orderPlaced')
 //       .get(protect,orderPlaced )
 
+
 router.patch('/editProfile',protect,profileUpdate)     
 
-
+router.patch('/addCart',protect,addCart)
 
 
 

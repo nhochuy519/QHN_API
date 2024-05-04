@@ -7,7 +7,17 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 
 
-
+const cart = mongoose.Schema({
+    productId: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Products'
+    },
+    quantity:{
+        type:Number,
+        default:1
+    },
+    price:Number,
+})
 
 
 const userSchema = mongoose.Schema(
@@ -60,6 +70,8 @@ const userSchema = mongoose.Schema(
             type:String,
         },
         products :[String],
+
+        cart:[cart],
         
         passwordResetCode:String,
         passwordResetExpires:Date,// đặt lại mật khẩu hết hạn

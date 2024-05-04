@@ -9,7 +9,8 @@ const crypto = require('crypto')
 
 const signToken = (id) => jwt.sign({id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN})
 
-const sendEmailWithGoogle= require('../utils/email')
+const sendEmailWithGoogle= require('../utils/email');
+const { findById, findByIdAndUpdate } = require('../modules/CustomerPurchaseModule');
 
 const signup =catchAsync(async (req,res,next)=>{
     const newUser = await User.create({
@@ -75,7 +76,7 @@ const protect = catchAsync(async(req,res,next) =>{
     }
     
     req.user=user
-    console.log(req.user.userName)
+    // console.log(req.user.userName)
     next()
 }
 )
@@ -204,6 +205,27 @@ const resetPassword = catchAsync(async(req,res,next)=>{
 
 })
 
+
+const addCart = catchAsync(async(req,res,next)=>{
+    const updateCart = await findByIdAndUpdate(req.user._id,{
+        $push:{
+            cart:req.body
+        }
+    },{
+        new:true,
+        runValidators:true 
+    })
+
+
+    res.status(200).json({
+        status:'success',
+        message:'Add to cart successfully'
+    })
+
+})
+
+
+
 module.exports={
     signup,
     login,
@@ -214,6 +236,7 @@ module.exports={
     sendProfile,
     profileUpdate,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    addCart
 
 }
