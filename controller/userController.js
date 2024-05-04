@@ -3,7 +3,7 @@ const User = require('../modules/userModule');
 const AppError = require('../utils/appError');
 const catchAsync= require('../utils/catchAsync')
 const jwt = require('jsonwebtoken');
-
+const mongoose =require('mongoose')
 const bcrypt = require('bcrypt');
 const crypto = require('crypto')
 
@@ -207,14 +207,28 @@ const resetPassword = catchAsync(async(req,res,next)=>{
 
 
 const addCart = catchAsync(async(req,res,next)=>{
-    const updateCart = await findByIdAndUpdate(req.user._id,{
-        $push:{
-            cart:req.body
-        }
-    },{
-        new:true,
-        runValidators:true 
-    })
+    const user = await User.findById(req.user._id);
+
+    const productExists = user.cart.some((item)=>item.productId.equals(new mongoose.Types.ObjectId(req.body.productId)))
+
+    if(productExists) {
+        const index = user.cart.findIndex(item=> item.productId.equals(new mongoose.Types.ObjectId(req.body.productId)))
+        console.log(req.body.quantity)
+        user.cart[index].quantity= user.cart[index].quantity + req.body.quantity
+        console.log(user.cart[index].quantity)
+        await user.save()
+    }
+    else {
+        const updateCart = await User.findByIdAndUpdate(req.user._id,{
+            $push:{
+                cart:req.body
+            }
+        },{
+            new:true,
+            runValidators:true 
+        })
+    }
+    
 
 
     res.status(200).json({
@@ -224,6 +238,10 @@ const addCart = catchAsync(async(req,res,next)=>{
 
 })
 
+const getCart = catchAsync(async(req,res,next)=>{
+
+
+})
 
 
 module.exports={

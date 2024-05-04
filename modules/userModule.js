@@ -10,7 +10,8 @@ const bcrypt = require('bcrypt');
 const cart = mongoose.Schema({
     productId: {
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Products'
+        ref:'Products',
+        unique:true
     },
     quantity:{
         type:Number,
