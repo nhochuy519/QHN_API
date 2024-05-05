@@ -210,23 +210,23 @@ const resetPassword = catchAsync(async(req,res,next)=>{
 const addCart = catchAsync(async(req,res,next)=>{
     const user = await User.findById(req.user._id);
 
-    const productExists = user.cart.some((item)=>item.productId.equals(new mongoose.Types.ObjectId(req.body.productId)))
+    const productExists = user.cart.some((item)=>item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
 
     if(productExists) {
-        const index = user.cart.findIndex(item=> item.productId.equals(new mongoose.Types.ObjectId(req.body.productId)))
+        const index = user.cart.findIndex(item=> item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
         console.log(req.body.quantity)
         user.cart[index].quantity= user.cart[index].quantity + req.body.quantity
         console.log(user.cart[index].quantity)
         await user.save()
     }
     else {
-        console.log('thực hiện')
-        const Product =await Products.findById(req.body.productId);
-        console.log(Product._id)
+        // console.log('thực hiện')
+        // const Product =await Products.findById(req.body.productId);
+        // console.log(Product._id)
         const updateCart = await User.findByIdAndUpdate(req.user._id,{
             $push:{
                 cart:{
-                    product:Product._id,
+                    product:req.body.productId,
                     quantity:req.body.quantity,
                     price:req.body.price
                 }
