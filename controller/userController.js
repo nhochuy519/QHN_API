@@ -263,12 +263,14 @@ const upDateQuantity = catchAsync(async(req,res,next)=>{
 
     if(req.body.quantity === 0) {
         user.cart.products.splice(req.body.cartIndex,1);
-        await user.save()
+        await user.save();
+        await user.updateCartTotal(req.user._id);
     }
     else {
         console.log('thực hiện upDateCart');
         user.cart.products[req.body.cartIndex].quantity = req.body.quantity;
-        await user.save()
+        await user.save();
+        await user.updateCartTotal(req.user._id);
     }
 
     res.status(200).json({
