@@ -50,7 +50,7 @@ router.route('/orderPlaced')
 
 router.patch('/editProfile',protect,profileUpdate)     
 
-router.patch('/addCart',protect,addCart);
+
 
 router.route('/cart')
       .get(protect,getUsercart)
