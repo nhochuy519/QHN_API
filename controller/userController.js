@@ -260,15 +260,15 @@ const getUsercart = catchAsync(async(req,res,next)=>{
 const upDateQuantity = catchAsync(async(req,res,next)=>{
 
     const user =await User.findById(req.user._id);
-
-    if(req.body.quantity === 0) {
+    const indexQuantity =user.cart.products[req.body.cartIndex].quantity
+    if(indexQuantity === 0) {
         user.cart.products.splice(req.body.cartIndex,1);
         await user.save();
         await user.updateCartTotal(req.user._id);
     }
     else {
         console.log('thực hiện upDateCart');
-        user.cart.products[req.body.cartIndex].quantity = req.body.quantity;
+        user.cart.products[req.body.cartIndex].quantity = indexQuantity  + 1;
         await user.save();
         await user.updateCartTotal(req.user._id);
     }
