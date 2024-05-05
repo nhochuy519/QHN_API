@@ -256,6 +256,28 @@ const getUsercart = catchAsync(async(req,res,next)=>{
 })
 
 
+const upDateQuantity = catchAsync(async(req,res,next)=>{
+
+    const user =await User.findById(req.user._id);
+
+    if(req.body.quantity === 0) {
+        user.cart.splice(req.body.cartIndex,1);
+        await user.save()
+    }
+    else {
+        console.log('thực hiện upDateCart');
+        user.cart[req.body.cartIndex].quantity = req.body.quantity;
+        await user.save()
+    }
+
+    res.status(200).json({
+        status:'success',
+        message:'Update cart successfully'
+    })
+    
+})
+
+
 
 
 module.exports={
@@ -270,6 +292,7 @@ module.exports={
     forgotPassword,
     resetPassword,
     addCart,
-    getUsercart
+    getUsercart,
+    upDateQuantity 
 
 }
