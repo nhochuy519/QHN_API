@@ -11,6 +11,7 @@ const signToken = (id) => jwt.sign({id},process.env.JWT_SECRET,{expiresIn:proces
 
 const sendEmailWithGoogle= require('../utils/email');
 const { findById, findByIdAndUpdate } = require('../modules/CustomerPurchaseModule');
+const Products = require('../modules/productModule');
 
 const signup =catchAsync(async (req,res,next)=>{
     const newUser = await User.create({
@@ -219,9 +220,16 @@ const addCart = catchAsync(async(req,res,next)=>{
         await user.save()
     }
     else {
+        console.log('thực hiện')
+        const Product =await Products.findById(req.body.productId);
+        console.log(Product._id)
         const updateCart = await User.findByIdAndUpdate(req.user._id,{
             $push:{
-                cart:req.body
+                cart:{
+                    product:Product._id,
+                    quantity:req.body.quantity,
+                    price:req.body.price
+                }
             }
         },{
             new:true,
@@ -238,10 +246,16 @@ const addCart = catchAsync(async(req,res,next)=>{
 
 })
 
-const getCart = catchAsync(async(req,res,next)=>{
 
-
+const getUsercart = catchAsync(async(req,res,next)=>{
+    const cart = await User.findOne({ userName: req.user.userName }).populate('cart.product').exec();;
+    res.status(200).json({
+        status: 'success',
+        data: cart
+    });
 })
+
+
 
 
 module.exports={
@@ -255,6 +269,7 @@ module.exports={
     profileUpdate,
     forgotPassword,
     resetPassword,
-    addCart
+    addCart,
+    getUsercart
 
 }
