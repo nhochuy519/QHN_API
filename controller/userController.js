@@ -209,32 +209,33 @@ const resetPassword = catchAsync(async(req,res,next)=>{
 
 const addCart = catchAsync(async(req,res,next)=>{
     const user = await User.findById(req.user._id);
-
-    const productExists = user.cart.some((item)=>item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
+   
+    const productExists = user.cart.products.some((item)=>item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
 
     if(productExists) {
-        const index = user.cart.findIndex(item=> item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
-        console.log(req.body.quantity)
-        user.cart[index].quantity= user.cart[index].quantity + req.body.quantity
-        console.log(user.cart[index].quantity)
+        const index = user.cart.products.findIndex(item=> item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
+
+        user.cart.products[index].quantity= user.cart.products[index].quantity + req.body.quantity
         await user.save()
+        await user.updateCartTotal(req.user._id)
     }
     else {
-        // console.log('thực hiện')
-        // const Product =await Products.findById(req.body.productId);
-        // console.log(Product._id)
+        console.log('thực hiện')
         const updateCart = await User.findByIdAndUpdate(req.user._id,{
             $push:{
-                cart:{
-                    product:req.body.productId,
-                    quantity:req.body.quantity,
-                    price:req.body.price
+                'cart.products':{
+                       product:req.body.productId,
+                        quantity:req.body.quantity,
+                        price:req.body.price
+
                 }
-            }
+            },
+            
         },{
             new:true,
             runValidators:true 
         })
+        await user.updateCartTotal(req.user._id)
     }
     
 
@@ -248,7 +249,7 @@ const addCart = catchAsync(async(req,res,next)=>{
 
 
 const getUsercart = catchAsync(async(req,res,next)=>{
-    const cart = await User.findOne({ userName: req.user.userName }).populate('cart.product').exec();;
+    const cart = await User.findOne({ userName: req.user.userName }).populate('cart.products.product').exec();;
     res.status(200).json({
         status: 'success',
         data: cart
@@ -261,12 +262,12 @@ const upDateQuantity = catchAsync(async(req,res,next)=>{
     const user =await User.findById(req.user._id);
 
     if(req.body.quantity === 0) {
-        user.cart.splice(req.body.cartIndex,1);
+        user.cart.products.splice(req.body.cartIndex,1);
         await user.save()
     }
     else {
         console.log('thực hiện upDateCart');
-        user.cart[req.body.cartIndex].quantity = req.body.quantity;
+        user.cart.products[req.body.cartIndex].quantity = req.body.quantity;
         await user.save()
     }
 

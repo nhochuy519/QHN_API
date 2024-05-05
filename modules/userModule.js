@@ -72,17 +72,21 @@ const userSchema = mongoose.Schema(
         },
         products :[String],
 
-        cart:[{
-            product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Products',
-            },
-            quantity:{
-                type:Number,
-                default:1
-            },
-            price:Number,
-        }],
+        cart:{
+            products:[{
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Products',
+                },
+                quantity:{
+                    type:Number,
+                    default:1
+                },
+                price:Number,
+            }
+        ],
+        totalCart:Number
+        },
         
         passwordResetCode:String,
         passwordResetExpires:Date,// đặt lại mật khẩu hết hạn
@@ -115,6 +119,14 @@ userSchema.pre('save',async function(next){
     next()
 })
 
+// userSchema.pre('findByIdAndUpdate',function(next){
+//     console.log('thực hiện middleware tính total trong user')
+//     this.cart.totalCart = this.cart.products.reduce((prev,next)=>{
+//         return prev+ (next.quantity * next.price)
+//     },0)
+
+// })
+
 
 userSchema.methods.correctPassword = async function(candidatePassword,userPasword) {
     // candidatePassword : mật khẩu này đến từ người dùng, khi đăng nhập
@@ -141,6 +153,17 @@ userSchema.methods.createPasswordResetCode = function() {
     this.passwordResetExpires = Date.now()+10 * 60 * 1000; // hết hạn sao 10 phút
 
     return resetCode
+}
+
+userSchema.methods.updateCartTotal = async function(id) {
+    const user = await User.findById(id);
+
+    const newTotalCart = user.cart.products.reduce((prev, next) => {
+        return prev + (next.quantity * next.price);
+    }, 0);
+    console.log(newTotalCart)
+    user.cart.totalCart = newTotalCart;
+    await user.save()
 }
 
 const User = mongoose.model('User',userSchema);
