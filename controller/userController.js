@@ -295,7 +295,7 @@ const upDateQuantity = catchAsync(async(req,res,next)=>{
 
 
 const deleteAllCart = catchAsync(async(req,res,next)=>{
-    const user = await findById(req.user._id) 
+    const user = await User.findById(req.user._id) 
     user.cart=[];
     user.save();
     res.status(200).json({
