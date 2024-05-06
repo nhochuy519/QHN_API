@@ -27,11 +27,12 @@ const createOrder = catchAsync(async(req,res,next)=>{
 })
 
 const orderPlaced = catchAsync(async(req,res,next)=>{
-    const order = await CustomerPurchase.find({name:req.user.name});
+    const order = await CustomerPurchase.find({'customer.name':req.user.userName}).populate('products.productId');
 
     
     res.status(200).json({
         status:'success',
+        length:order.length,
         data:order
     })
 
