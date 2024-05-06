@@ -1,6 +1,6 @@
 const express=require('express');
 
-const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword,addCart, getUsercart, upDateQuantity }= require('../controller/userController')
+const {signup,login,protect,restrictTo, deleteUser,editUserPass,sendProfile,profileUpdate,forgotPassword,resetPassword,addCart, getUsercart, upDateQuantity ,  deleteAllCart}= require('../controller/userController')
 
 const signupAdmin = require('../controller/adminController');
 const { createOrder,orderPlaced ,deleteOrder} = require('../controller/PurchaseController');
@@ -55,6 +55,7 @@ router.patch('/editProfile',protect,profileUpdate)
 router.route('/cart')
       .get(protect,getUsercart)
       .patch(protect,addCart)
+      .delete(protect,deleteAllCart)
 
 router.patch('/updateCartQuan',protect, upDateQuantity )
       

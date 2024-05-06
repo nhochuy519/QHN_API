@@ -121,6 +121,7 @@ const editUserPass = catchAsync(async(req,res,next)=>{
 const deleteUser = catchAsync(async(req,res,next)=>{
     const product =await User.findByIdAndDelete(req.user.id);
     res.status(200).json({
+        status:'success',
         message:'Delete successfully',
 
     })
@@ -293,6 +294,16 @@ const upDateQuantity = catchAsync(async(req,res,next)=>{
 })
 
 
+const deleteAllCart = catchAsync(async(req,res,next)=>{
+    const user = await findById(req.user._id) 
+    user.cart=[];
+    user.save();
+    res.status(200).json({
+        status: 'success',
+        message:'Delete cart successfully',
+    })
+})
+
 
 
 module.exports={
@@ -308,6 +319,7 @@ module.exports={
     resetPassword,
     addCart,
     getUsercart,
-    upDateQuantity 
+    upDateQuantity ,
+    deleteAllCart
 
 }
