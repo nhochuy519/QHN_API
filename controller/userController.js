@@ -295,9 +295,9 @@ const upDateQuantity = catchAsync(async(req,res,next)=>{
 
 
 const deleteAllCart = catchAsync(async(req,res,next)=>{
-    const user = await User.findById(req.user._id) 
-    user.cart={};
-    await user.save();
+    //$unset là một trong các toán tử cập nhật được sử dụng để xóa một trường (field) hoặc nhiều trường khỏi một tài liệu (document). Khi được sử dụng trong một câu lệnh cập nhật, 
+    const user = await User.updateOne({ _id: req.user._id }, { $unset: { cart: 1 } }); ;
+ 
     res.status(200).json({
         status: 'success',
         message:'Delete cart successfully',
