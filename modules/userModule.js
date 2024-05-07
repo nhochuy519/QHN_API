@@ -98,6 +98,15 @@ const userSchema = mongoose.Schema(
             emun:['COD','Chuyển khoản'],
             default:'COD'
         },
+        favorite:[
+            {
+                products :{
+                   type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Products',
+                        
+                }
+            }
+        ]
     }
     
     

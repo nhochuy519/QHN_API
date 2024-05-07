@@ -207,7 +207,7 @@ const resetPassword = catchAsync(async(req,res,next)=>{
 
 })
 
-
+// cart
 const addCart = catchAsync(async(req,res,next)=>{
     const user = await User.findById(req.user._id);
    
@@ -243,7 +243,7 @@ const addCart = catchAsync(async(req,res,next)=>{
 
     res.status(200).json({
         status:'success',
-        message:'Add to cart successfully'
+        message:'Added to cart successfully'
     })
 
 })
@@ -253,6 +253,7 @@ const getUsercart = catchAsync(async(req,res,next)=>{
     const cart = await User.findOne({ userName: req.user.userName }).populate('cart.products.product').exec();;
     res.status(200).json({
         status: 'success',
+        length: cart.length,
         data: cart
     });
 })
@@ -305,6 +306,43 @@ const deleteAllCart = catchAsync(async(req,res,next)=>{
 })
 
 
+// favorites
+const getFavorites = catchAsync(async(req,res,next)=>{
+    const favorites = await User.findOne({ userName: req.user.userName }).populate('favorite.products');
+
+    res.status(200).json({
+        status:'success',
+        length:favorites.length,
+        data:favorites
+        
+    })
+})
+
+const addFavorites =  catchAsync(async(req,res,next)=>{
+    await User.findByIdAndUpdate({userName: req.user.userName},{
+        $push:{
+            'favorite.products':req.body.productId
+        }
+    })
+
+    res.status(200).json({
+        status:'success',
+        message:'Added to favorites successfully'
+        
+    })
+})
+
+const removeFavorite =  catchAsync(async(req,res,next)=>{
+    const uses = await findOne({ userName: req.user.userName });
+
+    uses.favorites.products.splice(req.body.favoriteIndex,1)
+    await user.save();
+    res.status(200).json({
+        status:'success',
+        message:'Removed from favorites successfully'
+        
+    })
+})
 
 module.exports={
     signup,
@@ -320,6 +358,9 @@ module.exports={
     addCart,
     getUsercart,
     upDateQuantity ,
-    deleteAllCart
+    deleteAllCart,
+    getFavorites,
+    addFavorites,
+    removeFavorite
 
 }
