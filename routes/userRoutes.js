@@ -62,7 +62,7 @@ router.patch('/updateCartQuan',protect, upDateQuantity );
 router.route('/favorite')
       .get(protect,getFavorites)  
       .patch(protect,addFavorites)
-      .delete(removeFavorite)
+      .delete(protect,removeFavorite)
 
 
 
