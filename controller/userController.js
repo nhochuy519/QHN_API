@@ -336,7 +336,10 @@ const removeFavorite =  catchAsync(async(req,res,next)=>{
         $pull:{
             'favorite':{'products':req.body.productId}
         }
-    }, { new: true })
+    }, {
+        new:true,
+        runValidators:true 
+    })
    
     res.status(200).json({
         status:'success',
