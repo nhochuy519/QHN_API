@@ -332,10 +332,12 @@ const addFavorites = catchAsync(async (req, res, next) => {
 });
 
 const removeFavorite =  catchAsync(async(req,res,next)=>{
-    const uses = await findOne({ userName: req.user.userName });
-
-    uses.favorites.products.splice(req.body.favoriteIndex,1)
-    await user.save();
+    const uses = await User.findOneAndUpdate(req.user._id,{
+        $pull:{
+            'favorite':{'products':req.body.productId}
+        }
+    }, { new: true })
+   
     res.status(200).json({
         status:'success',
         message:'Removed from favorites successfully'
