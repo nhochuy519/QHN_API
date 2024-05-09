@@ -332,7 +332,7 @@ const addFavorites = catchAsync(async (req, res, next) => {
 });
 
 const removeFavorite =  catchAsync(async(req,res,next)=>{
-    const uses = await User.findOneAndUpdate(req.user._id,{
+     await User.findOneAndUpdate(req.user._id,{
         $pull:{
             'favorite':{'products':req.body.productId}
         }
