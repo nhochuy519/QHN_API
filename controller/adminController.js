@@ -50,4 +50,17 @@ const loginAdmin =catchAsync(async (req,res,next)=>{
 
 }) 
 
-module.exports = {signupAdmin,loginAdmin}
+
+const getAllUser = catchAsync(async(req,res,next)=>{
+    const allUser = await User.find()
+
+    res.status(200).json({
+        status:'success',
+        length:allUser.length,
+        data:{
+            allUser
+        }
+    })
+})
+
+module.exports = {signupAdmin,loginAdmin,getAllUser}

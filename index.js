@@ -43,7 +43,7 @@ app.use(globalErrorHandler)
 
 
 
-app.listen(process.env.PORT,()=>{
+app.listen(process.env.PORT,()=>{ 
     console.log('đang lắng nghe trên cổng 8000')
 })
 

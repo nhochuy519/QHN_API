@@ -318,19 +318,18 @@ const getFavorites = catchAsync(async(req,res,next)=>{
     })
 })
 
-const addFavorites =  catchAsync(async(req,res,next)=>{
-    await User.findByIdAndUpdate({userName: req.user.userName},{
-        $push:{
-            'favorite.products':req.body.productId
+const addFavorites = catchAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user._id, {
+        $push: {
+            'favorite': { products: req.body.productId }
         }
-    })
+    });
 
     res.status(200).json({
-        status:'success',
-        message:'Added to favorites successfully'
-        
-    })
-})
+        status: 'success',
+        message: 'Added to favorites successfully'
+    });
+});
 
 const removeFavorite =  catchAsync(async(req,res,next)=>{
     const uses = await findOne({ userName: req.user.userName });
