@@ -83,6 +83,7 @@ const userSchema = mongoose.Schema(
                     default:1
                 },
                 price:Number,
+                size:Number
             }
         ],
         totalCart:Number
