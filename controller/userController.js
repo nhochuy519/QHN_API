@@ -227,7 +227,8 @@ const addCart = catchAsync(async(req,res,next)=>{
                 'cart.products':{
                        product:req.body.productId,
                         quantity:req.body.quantity,
-                        price:req.body.price
+                        price:req.body.price,
+                        size:req.body.size
 
                 }
             },
