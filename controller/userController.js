@@ -212,11 +212,11 @@ const addCart = catchAsync(async(req,res,next)=>{
     const user = await User.findById(req.user._id);
    
     const productExists = user.cart.products.some((item)=>item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
-
-    if(productExists) {
+    const sizeExists = user.cart.products.some((item)=>item.size === req.body.size)
+    if(productExists && sizeExists) {
         const index = user.cart.products.findIndex(item=> item.product.equals(new mongoose.Types.ObjectId(req.body.productId)))
 
-        user.cart.products[index].quantity= user.cart.products[index].quantity + req.body.quantity
+        user.cart.products[index].quantity= user.cart.products[index].quantity + req.body.quantity;
         await user.save()
         await user.updateCartTotal(req.user._id)
     }
