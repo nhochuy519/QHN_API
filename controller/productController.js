@@ -47,9 +47,13 @@ class ApiFeatures {
         return this;
     }
     filterByPrice() {
-        if(this.queryString.filterByPrice) {
-            const filterPrice = JSON.parse(this.queryString.filterByPrice);
-            console.log(filterPrice )
+        if(this.queryString.price) {
+            if(this.queryString.price === 'low') {
+                this.query = this.query.find().sort({ price: -1 })
+            }
+            else if(this.queryString.price === 'high') {
+                this.query = this.query.find().sort({ price: 1 })
+            }
         }
         return this;
     }
