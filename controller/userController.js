@@ -18,7 +18,7 @@ const signup =catchAsync(async (req,res,next)=>{
         userName:req.body.userName,
         email:req.body.email,
         password:req.body.password,
-        passwordConfirm:req.body.passwordConfirm
+        passwordConfirm:req.body.passwordConfirm    
     })
     const token = signToken(newUser._id)
     
